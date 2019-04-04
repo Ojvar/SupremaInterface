@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Suprema.SFM_SDK_NET;
 
 namespace SupremaInterface
@@ -13,14 +14,21 @@ namespace SupremaInterface
 
 
         #region Methods
-        #region Class base methods
+        #region Base Class Methods
         /// <summary>
         /// Ctr
         /// </summary>
         public
-        Suprema ()
+        Suprema (string path = null)
         {
-            supremaEngine = new SFM_SDK_NET ();
+            if (null == path)
+            {
+                supremaEngine = new SFM_SDK_NET ();
+            }
+            else
+            {
+                supremaEngine = new SFM_SDK_NET (path);
+            }
         }
 
         /// <summary>
@@ -29,6 +37,23 @@ namespace SupremaInterface
         ~Suprema ()
         {
             close ();
+        }
+        #endregion
+
+
+        #region Properties Methods
+        /// <summary>
+        /// Get template size
+        /// </summary>
+        public uint
+        getTemplateSize ()
+        {
+            uint result = 0;
+
+            supremaEngine.UF_GetSysParameter (UF_SYS_PARAM.UF_SYS_TEMPLATE_SIZE,
+                                              ref result);
+
+            return result;
         }
         #endregion
 
@@ -367,6 +392,39 @@ namespace SupremaInterface
             {
                 get;
                 set;
+            }
+            #endregion
+
+
+            #region Methods
+            /// <summary>
+            /// Parse config
+            /// </summary>
+            public static DeviceConfigModel
+            loadConfig (string data)
+            {
+                DeviceConfigModel result;
+
+                try
+                {
+                    result = JsonConvert.DeserializeObject<DeviceConfigModel> (data);
+                }
+                catch (Exception)
+                {
+                    result = new DeviceConfigModel ();
+                }
+
+                return result;
+            }
+
+
+            /// <summary>
+            /// Serialize in json format
+            /// </summary>
+            public string
+            toJson (DeviceConfigModel model)
+            {
+                return JsonConvert.SerializeObject (model);
             }
             #endregion
         }
