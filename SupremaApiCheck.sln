@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupremaInterface", "Suprema
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupremaApiCheck", "SupremaApiCheck\SupremaApiCheck.csproj", "{F8DAB16F-44EA-4868-9164-504AA36299CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerPrintController", "FingerPrintController\FingerPrintController.csproj", "{14F73FF7-D769-4FBA-A025-AD6DA91BAFDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{350B3740-EC58-45C8-8B1D-494D7134F835}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{F8DAB16F-44EA-4868-9164-504AA36299CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8DAB16F-44EA-4868-9164-504AA36299CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8DAB16F-44EA-4868-9164-504AA36299CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F73FF7-D769-4FBA-A025-AD6DA91BAFDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F73FF7-D769-4FBA-A025-AD6DA91BAFDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F73FF7-D769-4FBA-A025-AD6DA91BAFDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F73FF7-D769-4FBA-A025-AD6DA91BAFDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{350B3740-EC58-45C8-8B1D-494D7134F835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{350B3740-EC58-45C8-8B1D-494D7134F835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{350B3740-EC58-45C8-8B1D-494D7134F835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{350B3740-EC58-45C8-8B1D-494D7134F835}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
