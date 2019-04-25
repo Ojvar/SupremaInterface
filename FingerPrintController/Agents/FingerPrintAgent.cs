@@ -70,6 +70,31 @@ namespace FingerPrintController.Agents
 
 
         /// <summary>
+        /// Read a Template
+        /// </summary>
+        public UF_RET_CODE
+        readTemplate (uint userId,
+                      Action<uint, byte[]> callback)
+        {
+            uint tSize = deviceAgent.getTemplateSize ();
+
+            uint numOfTemplate = 0;
+
+            byte[] data = new byte[tSize];
+
+
+            UF_RET_CODE result = deviceAgent.readTemplate (userId,
+                                                           ref numOfTemplate,
+                                                           data);
+
+            callback?.Invoke (numOfTemplate,
+                              data);
+
+            return result;
+        }
+
+
+        /// <summary>
         /// Enroll
         /// </summary>
         public UF_RET_CODE
@@ -175,11 +200,23 @@ namespace FingerPrintController.Agents
         {
             switch (command)
             {
+                case AgentsManager.EnumCommands.ReadTemplate:
+                    if (data.Length == 2)
+                    {
+                        return readTemplate (Convert.ToUInt32 (data[0]),
+                                             (Action<uint, byte[]>)data[1]);
+                    }
+
+                    return -1;
+
+
                 case AgentsManager.EnumCommands.Enroll:
                     if (data.Length == 3)
                     {
+                        UF_ENROLL_OPTION options = UF_ENROLL_OPTION.UF_ENROLL_NONE;
+
                         return enroll (Convert.ToUInt32 (data[0]),
-                                       data[1],
+                                       options,
                                        (Action<uint, uint>)data[2]);
                     }
 
@@ -187,13 +224,15 @@ namespace FingerPrintController.Agents
 
 
                 case AgentsManager.EnumCommands.EnrollTemplate:
-                    if (data.Length == 5)
+                    if (data.Length == 4)
                     {
+                        byte[] template = (byte[])data[2];
+
                         return enrollByTemplate (Convert.ToUInt32 (data[0]),
                                                  data[1],
-                                                 Convert.ToUInt32 (data[2]),
-                                                 (byte[])data[3],
-                                                 (Action<uint>)data[4]);
+                                                 (uint)template.Length,
+                                                 template,
+                                                 (Action<uint>)data[3]);
                     }
 
                     return -1;
@@ -209,11 +248,13 @@ namespace FingerPrintController.Agents
 
 
                 case AgentsManager.EnumCommands.IdentifyTemplate:
-                    if (data.Length == 3)
+                    if (data.Length == 2)
                     {
-                        return identifyByTemplate (Convert.ToUInt32 (data[0]),
-                                                   (byte[])data[1],
-                                                   (Action<uint, byte>)data[2]);
+                        byte[] template = (byte[])data[0];
+
+                        return identifyByTemplate ((uint)template.Length,
+                                                   template,
+                                                   (Action<uint, byte>)data[1]);
                     }
 
                     return -1;

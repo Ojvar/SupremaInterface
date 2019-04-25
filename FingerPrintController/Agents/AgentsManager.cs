@@ -16,8 +16,12 @@ namespace FingerPrintController.Agents
         {
             Enroll,
             EnrollTemplate,
+
             Identify,
             IdentifyTemplate,
+
+            ReadTemplate,
+
             Start,
             Finish
         }

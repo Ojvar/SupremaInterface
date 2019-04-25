@@ -59,8 +59,9 @@
     <Compile Include="Agents\IFingerPrint.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="DBase\MySqlDBase.cs" />
+    <Compile Include="Extensions\StringEtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />
-    <Compile Include="FingerPrinterController.cs" />
+    <Compile Include="FingerPrintController.cs" />
     <Compile Include="Model\DBaseFieldAttribute.cs" />
     <Compile Include="Model\FingerPrintDevice.cs" />
     <Compile Include="Model\FingerPrint.cs" />

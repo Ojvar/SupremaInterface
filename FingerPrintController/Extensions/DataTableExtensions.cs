@@ -7,6 +7,7 @@ namespace FingerPrintController.Extensions
 {
     public static partial class Extensions
     {
+        #region Methods
         /// <summary>
         /// Convert data table row to List
         /// </summary>
@@ -69,5 +70,6 @@ namespace FingerPrintController.Extensions
 
             return value;
         }
-    }
+    } 
+    #endregion
 }

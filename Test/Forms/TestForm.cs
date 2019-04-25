@@ -3,13 +3,26 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 
-using FingerPrintController;
+using FP = FingerPrintController;
 
 namespace Test.Forms
 {
     public partial class TestForm : Form
     {
         private TcpClient client = null;
+
+        private uint userId
+        {
+            get
+            {
+                return (uint)userIdUpDown.Value;
+            }
+        }
+
+        private byte subId = 0;
+
+        private string tData = "";
+
 
         public TestForm ()
         {
@@ -28,12 +41,54 @@ namespace Test.Forms
             enrollButton.Click += EnrollComboBox_Click;
 
             identityButton.Click += IdentityButton_Click; ;
+
+            readTemplateButton.Click += ReadTemplateButton_Click;
+
+            enrollTemplateButton.Click += EnrollTemplateButton_Click;
+
+            identifyTemplateButton.Click += IdentifyTemplateButton_Click; ;
+        }
+
+        private void IdentifyTemplateButton_Click (object sender, EventArgs e)
+        {
+            string msg =
+                $"{FP.FingerPrintController.C_IDENTIFY_TEMPLATE}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{devicesComboBox.Text}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{tData}";
+
+            write (client,
+                   msg);
+        }
+
+        private void EnrollTemplateButton_Click (object sender, EventArgs e)
+        {
+            string msg =
+                $"{FP.FingerPrintController.C_ENROLL_TEMPLATE}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{devicesComboBox.Text}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{userId}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{tData}";
+
+
+            write (client,
+                   msg);
+        }
+
+        private void ReadTemplateButton_Click (object sender, EventArgs e)
+        {
+            string msg =
+                $"{FP.FingerPrintController.C_READ_TEMPLATE}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{devicesComboBox.Text}" +
+                   $"{FP.FingerPrintController.C_SEPARATOR}{userId}";
+
+
+            write (client,
+                   msg);
         }
 
         private void IdentityButton_Click (object sender, EventArgs e)
         {
             string msg =
-               $"{FingerPrinterController.C_IDENTIFY}{FingerPrinterController.C_SEPARATOR}{devicesComboBox.Text}";
+               $"{FP.FingerPrintController.C_IDENTIFY}{FP.FingerPrintController.C_SEPARATOR}{devicesComboBox.Text}";
 
             write (client,
                    msg);
@@ -42,7 +97,10 @@ namespace Test.Forms
         private void EnrollComboBox_Click (object sender, EventArgs e)
         {
             string msg =
-                $"{FingerPrinterController.C_ENROLL}{FingerPrinterController.C_SEPARATOR}{devicesComboBox.Text}";
+                $"{FP.FingerPrintController.C_ENROLL}" +
+                    $"{FP.FingerPrintController.C_SEPARATOR}{devicesComboBox.Text}" +
+                    $"{FP.FingerPrintController.C_SEPARATOR}{userId}" +
+                    $"{FP.FingerPrintController.C_SEPARATOR}{subId}";
 
             write (client,
                    msg);
@@ -80,6 +138,7 @@ namespace Test.Forms
 
                     byte[] pureData = new byte[len];
 
+
                     Array.Copy (data,
                                 pureData,
                                 len);
@@ -90,7 +149,7 @@ namespace Test.Forms
 
             thread.Start ();
 
-            write (client, FingerPrinterController.C_DEVICES_LIST);
+            write (client, FP.FingerPrintController.C_DEVICES_LIST);
         }
 
         private void log (string msg)
@@ -100,11 +159,21 @@ namespace Test.Forms
                 logListBox.Items.Insert (0,
                                          msg);
 
-                string[] data = msg.Split (FingerPrinterController.C_SEPARATOR);
+                string[] data = msg.Split (FP.FingerPrintController.C_SEPARATOR);
 
-                devicesComboBox.Items.Clear ();
+                if (data[0] == FingerPrintController.FingerPrintController.C_DEVICES_LIST)
+                {
+                    devicesComboBox.Items.Clear ();
 
-                devicesComboBox.Items.AddRange (data);
+                    devicesComboBox.Items.AddRange (data);
+                }
+                else if (data[0] == FingerPrintController.FingerPrintController.C_READ_TEMPLATE)
+                {
+                    tData = data[3];
+                }
+                else if (data[0] == FingerPrintController.FingerPrintController.C_IDENTIFY_TEMPLATE)
+                {
+                }
             }));
         }
 
@@ -120,12 +189,12 @@ namespace Test.Forms
 
         private void StopButton_Click (object sender, EventArgs e)
         {
-            FingerPrinterController.stop ();
+            FP.FingerPrintController.stop ();
         }
 
         private void StartButton_Click (object sender, EventArgs e)
         {
-            FingerPrinterController.start ();
+            FP.FingerPrintController.start ();
         }
     }
 }
